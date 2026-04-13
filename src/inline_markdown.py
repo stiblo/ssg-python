@@ -111,9 +111,3 @@ def text_to_textnodes(text):
     result_list = split_nodes_link(result_list)
 
     return result_list
-
-
-
-        
-
-        
