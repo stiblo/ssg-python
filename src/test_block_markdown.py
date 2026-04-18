@@ -76,7 +76,6 @@ block
 
 """        
         blocks = markdown_to_blocks(md)
-        #print(f"DEBUG:{blocks}")
         block_types = []
         for block in blocks:
             block_types.append(block_to_block_type(block))
