@@ -5,7 +5,7 @@ from markdown import extract_title
 from pathlib import Path
 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
     source_file = open(from_path, "r")
@@ -21,6 +21,8 @@ def generate_page(from_path, template_path, dest_path):
 
     finished_page = template_file_content.replace("{{ Title }}", page_title)
     finished_page = finished_page.replace("{{ Content }}", source_file_html_node.to_html())
+    finished_page = finished_page.replace('href="/', f'href="{basepath}')
+    finished_page = finished_page.replace('src="/', f'src="{basepath}')
 
     dest_dir_path = os.path.dirname(dest_path)
     if dest_dir_path != "":
@@ -30,7 +32,7 @@ def generate_page(from_path, template_path, dest_path):
     write_file.write(finished_page)
     write_file.close()
 
-def generate_pages_recursive(content_dir_path, template_path, dest_dir_path):
+def generate_pages_recursive(content_dir_path, template_path, dest_dir_path, basepath):
     source_contents = os.listdir(content_dir_path)
 
     if len(source_contents) == 0:
@@ -43,7 +45,7 @@ def generate_pages_recursive(content_dir_path, template_path, dest_dir_path):
         source_path = os.path.join(content_dir_path, i)
         dest_path = os.path.join(dest_dir_path, i)
         if os.path.isfile(source_path):
-            generate_page(source_path, template_path, Path(dest_path).with_suffix(".html"))
+            generate_page(source_path, template_path, Path(dest_path).with_suffix(".html"), basepath)
         else:
-            generate_pages_recursive(source_path, template_path ,dest_path)
+            generate_pages_recursive(source_path, template_path ,dest_path, basepath)
 
