@@ -2,10 +2,7 @@ import os
 import shutil
 
 def copy_static_to_public(source_dir, dest_dir):
-    if os.path.exists(dest_dir):
-        shutil.rmtree(dest_dir)
-        os.mkdir(dest_dir)
-    else:
+    if not os.path.exists(dest_dir):
         os.mkdir(dest_dir)
     if not os.path.exists(source_dir):
         raise Exception("source directory does not exist")

@@ -1,7 +1,7 @@
 from block_markdown import markdown_to_blocks
 from block_markdown import block_to_block_type
 from block_markdown import BlockType
-from htmlnode import ParentNode,LeafNode
+from htmlnode import ParentNode
 from inline_markdown import text_to_textnodes
 from textnode import text_node_to_html_node
 from textnode import TextNode, TextType
@@ -74,7 +74,6 @@ def md_list_to_html_node(md_block, list_type):
                 list_element_nodes.append(list_element_node_parent)
             return ParentNode("ol", list_element_nodes)
 
-
 def md_heading_to_html_node(md_block):
     if md_block.startswith("###### "):
         node_children = text_to_children(md_block[7:])
@@ -97,4 +96,14 @@ def md_heading_to_html_node(md_block):
     else:
         raise ValueError("invalid header start syntax")
     
+def extract_title(markdown):
+    md_blocks = markdown_to_blocks(markdown)
+
+    for block in md_blocks:
+        if block_to_block_type(block) == BlockType.HEADING:
+            if block.startswith("# "):
+                return block[2:].strip()
+    
+    raise Exception("h1 header not found in markdown")
+
     
